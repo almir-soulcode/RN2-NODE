@@ -23,6 +23,29 @@ app.get("/hello", (req, res) => { // manipulador de rota
   res.send("Batata!"); // enviando a resposta para quem solicitou
 });
 
+// Listagem de todos os clientes
+app.get("/clientes", async (req, res) => {
+  // SELECT * FROM clientes;
+  const listaClientes = await Cliente.findAll();
+  res.json(listaClientes);
+});
+
+// Listagem de um cliente específico (ID = ?)
+// :id => parâmetro de rota
+app.get("/clientes/:id", async (req, res) => {
+  // SELECT * FROM clientes WHERE id = 1;
+  const cliente = await Cliente.findOne({ 
+    where: { id: req.params.id },
+    include: [Endereco] // juntar os dados do cliente com seu respectivo endereço
+  });
+  
+  if(cliente) {
+    res.json(cliente);
+  } else {
+    res.status(404).json({ message: "Cliente não encontrado!" });
+  }
+});
+
 // Rodar a aplicação backend
 app.listen(3000, () => {
   console.log("Servidor rodando em http://localhost:3000/");
