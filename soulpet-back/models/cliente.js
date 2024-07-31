@@ -31,11 +31,13 @@ export const Cliente = connection.define("cliente", {
 // Associação 1:1 (Cliente-Endereço)
 // Cliente tem um Endereco
 // Endereço ganha uma chave estrangeira
-Cliente.hasOne(Endereco);
+
+// CASCADE -> indica que se o cliente for deletado o endereço será deletado também.
+Cliente.hasOne(Endereco, { onDelete: "CASCADE" });
 Endereco.belongsTo(Cliente); // Gerar uma chave estrangeira na tabela enderecos
 
 // Associação 1:N (Cliente-Pet)
-Cliente.hasMany(Pet);
+Cliente.hasMany(Pet, { onDelete: "CASCADE" });
 Pet.belongsTo(Cliente); // Gera uma chave estrangeira para indicar o responsável
 
 // Cliente = model = gerenciar a tabela de clientes
